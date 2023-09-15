@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <title>ATODY</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="title">Choisir une recette</h2>
+
+      <select id="recette">
+        <!-- Options de recettes sont générées dynamiquement par JavaScript -->
+      </select>
+
+      <div class="card">
+        <div class="desc">
+          <div class="nom">
+            <h3 id="nom"></h3>
+          </div>
+          <div class="gal">
+            <div class="statut">
+              <p>Etape <span class="etatNum"></span></p>
+              <p><span class="etatNum"></span> / <span id="total"></span></p>
+            </div>
+            <div id="etapes">
+              <!-- Les étapes de préparation seront affichées ici par JavaScript -->
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="precedent">Précédent</button>
+          <button id="suivant">Suivant</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
