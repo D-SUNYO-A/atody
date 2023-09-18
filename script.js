@@ -73,54 +73,25 @@ const recettes = [
   },
 ];
 
-let recetteSelectionnee = null;
-let etapeActuelle = 0;
-
-// Fonction pour mettre à jour le nombre d'etape actuelle
-const mettreAJourNombreEtapeActuelle = () => {
-  for (i = 0; i < etatNums.length; i++) {
-    etatNums[i].textContent = etapeActuelle + 1;
-  }
-};
-
-// Fonction pour mettre à jour le nombre total d'étapes
-const mettreAJourNombreTotalEtapes = () => {
-  const recette = recettes.find((r) => r.nom === recetteSelectionnee);
-  if (recette) {
-    const nombreTotalEtapes = recette.etapes.length;
-    numTotal.textContent = nombreTotalEtapes;
-  } else {
-    numTotal.textContent = "";
-  }
-};
-
 // Générer dynamiquement les options de recettes à partir du tableau d'objets recettes
-recettes.forEach((recette) => {
+recettes.forEach(recette => {
   const option = document.createElement("option");
   option.value = recette.nom;
   option.textContent = recette.nom;
   recetteSelect.appendChild(option);
 });
 
-// Fonction pour afficher les étapes de la recette sélectionnée
-const afficherEtapes = () => {
-  etapes.innerHTML = "";
-  const recette = recettes.find((r) => r.nom === recetteSelectionnee);
-  if (recette) {
-    const etape = recette.etapes[etapeActuelle];
-    const paragraphe = document.createElement("p");
-    paragraphe.textContent = etape;
-    etapes.appendChild(paragraphe);
-  }
-};
+let recetteSelectionnee = recetteSelect.value;
+let etapeActuelle = 0;
 
 // Gérer la sélection de la recette
 recetteSelect.addEventListener("change", () => {
   recetteSelectionnee = recetteSelect.value;
   nomRecette.innerText = recetteSelectionnee;
   etapeActuelle = 0;
-  afficherEtapes();
+  mettreAJourNumeroEtapeActuelle();
   mettreAJourNombreTotalEtapes();
+  afficherEtapes();
 });
 
 // Gérer les boutons "Étape précédente" et "Étape suivante"
@@ -129,25 +100,90 @@ precedentBtn.addEventListener("click", () => {
     etapeActuelle--;
   }
   afficherEtapes();
-  mettreAJourNombreEtapeActuelle();
+  mettreAJourNumeroEtapeActuelle();
 });
 
 suivantBtn.addEventListener("click", () => {
-  const recette = recettes.find((r) => r.nom === recetteSelectionnee);
+  const recette = recetteActuelle();
   if (etapeActuelle < recette.etapes.length - 1) {
     etapeActuelle++;
   }
   afficherEtapes();
-  mettreAJourNombreEtapeActuelle();
+  mettreAJourNumeroEtapeActuelle();
 });
 
-// Par défaut, afficher les étapes de la première recette
-for (i = 0; i < etatNums.length; i++) {
-  etatNums[i].textContent = etapeActuelle + 1;
+// Pour trouver la recette actuel 
+const recetteActuelle = () => {
+  const recette = recettes.find((r) => r.nom === recetteSelectionnee);
+  return recette
 }
-recetteSelect.value = recettes[0].nom;
-recetteSelectionnee = recetteSelect.value;
-nomRecette.innerText = recetteSelectionnee;
-mettreAJourNombreTotalEtapes();
 
+// Pour faire le total des etapes de la recette actuelle 
+const totalEtapeRecetteActuelle = () => {
+  return recetteActuelle().etapes.length;
+}
+
+// Pour mettre à jour le nombre total des étapes
+const mettreAJourNombreTotalEtapes = () => {
+    const nombreTotalEtapes = totalEtapeRecetteActuelle();
+    numTotal.textContent = nombreTotalEtapes;
+};
+
+// Pour mettre à jour le numéro d'etape actuelle
+const mettreAJourNumeroEtapeActuelle = () => {
+  for (let etatNum of etatNums) {
+    // Mis à jour le numéro d'etape actuelle
+    etatNum.textContent = etapeActuelle + 1;
+
+    // Caster "etatNum.textContent" (string) en un entier (int)
+    let numActuelle = parseInt(etatNum.textContent);
+    
+    // Mettre à jour le style du bouton Précédent 
+    numActuelle === 1 
+      ? 
+        (
+          precedentBtn.disabled  = true ,
+          precedentBtn.style.cursor  = 'not-allowed',
+          precedentBtn.style.opacity  = '50%' 
+        )
+      : 
+        (
+          precedentBtn.disabled  = false,
+          precedentBtn.style.cursor  = 'pointer',
+          precedentBtn.style.opacity  = '100%' 
+        )
+    
+    // Mettre à jour le style du bouton Suivant 
+    numActuelle === totalEtapeRecetteActuelle()
+    ? 
+      (
+        suivantBtn.disabled  = true ,
+        suivantBtn.style.cursor  = 'not-allowed',
+        suivantBtn.style.opacity  = '50%' 
+      )
+    : 
+      (
+        suivantBtn.disabled  = false,
+        suivantBtn.style.cursor  = 'pointer',
+        suivantBtn.style.opacity  = '100%' 
+      )
+  }
+};
+
+// Pour afficher les étapes de la recette sélectionnée
+const afficherEtapes = () => {
+  etapes.innerHTML = "";
+  const recette = recetteActuelle(); 
+  const etape = recette.etapes[etapeActuelle];
+  const paragraphe = document.createElement("p");
+  paragraphe.textContent = etape;
+  etapes.appendChild(paragraphe);
+};
+
+// Par défaut, afficher les étapes de la première recette
+recetteSelect.value = recettes[0].nom;
+nomRecette.innerText = recetteSelectionnee;
+
+mettreAJourNombreTotalEtapes();
+mettreAJourNumeroEtapeActuelle();
 afficherEtapes();
