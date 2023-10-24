@@ -29,6 +29,10 @@ Bienvenue dans l'application "ATODY" ! Cette application vous permet de choisir 
 - CSS : Mise en page et style de l'application.
 - JavaScript : Logique de l'application et interactivité.
 
+## Aperçu de l'Application
+
+Vous pouvez essayer une version en ligne de cette application en suivant ce lien : [ATODY](https://sunyo-atody.netlify.app/).
+
 ## Contributeur
 
 Sunyo Danarson
